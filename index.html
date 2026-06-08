@@ -1,0 +1,100 @@
+from datetime import datetime
+
+
+def convert_length(choice, value):
+    if choice == 1:
+        return value * 1000, "км", "м"
+    elif choice == 2:
+        return value / 1000, "м", "км"
+    return None
+
+
+def convert_weight(choice, value):
+    if choice == 3:
+        return value * 1000, "кг", "г"
+    elif choice == 4:
+        return value / 1000, "г", "кг"
+    return None
+
+
+def convert_temperature(choice, value):
+    if choice == 5:
+        return (value * 9 / 5) + 32, "C", "F"
+    elif choice == 6:
+        return (value - 32) * 5 / 9, "F", "C"
+    return None
+
+
+def ask_float(prompt):
+    while True:
+        try:
+            return float(input(prompt).replace(",", "."))
+        except ValueError:
+            print("Ошибка: введите число.")
+
+
+def show_menu():
+    print("===== Конвертер =====")
+    print("1. Км -> М")
+    print("2. М -> Км")
+    print("3. Кг -> Г")
+    print("4. Г -> Кг")
+    print("5. C -> F")
+    print("6. F -> C")
+    print("0. Шығу")
+
+
+def main():
+    total_conversions = 0
+
+    while True:
+        show_menu()
+
+        try:
+            choice = int(input("Таңдау: "))
+        except ValueError:
+            print("Ошибка: выберите пункт меню числом.\n")
+            continue
+
+        if choice == 0:
+            break
+
+        result = None
+
+        if choice in (1, 2):
+            value = ask_float("Введите значение: ")
+            result = convert_length(choice, value)
+        elif choice in (3, 4):
+            value = ask_float("Введите значение: ")
+            result = convert_weight(choice, value)
+        elif choice in (5, 6):
+            value = ask_float("Введите значение: ")
+            result = convert_temperature(choice, value)
+        else:
+            print("Неверный выбор. Попробуйте снова.\n")
+            continue
+
+        if result is None:
+            print("Ошибка преобразования.\n")
+            continue
+
+        converted, from_unit, to_unit = result
+        total_conversions += 1
+
+        print("Нәтиже:")
+        original_text = int(value) if float(value).is_integer() else value
+        converted_text = int(converted) if float(converted).is_integer() else round(converted, 2)
+
+        print(f"{original_text} {from_unit} = {converted_text} {to_unit}")
+        print("Конвертация сәтті аяқталды")
+        print("Уақыты:")
+        print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        print()
+
+    print("Бағдарлама жабылды.")
+    print("Жалпы орындалған конвертация саны:")
+    print(total_conversions)
+
+
+if __name__ == "__main__":
+    main()
